@@ -166,6 +166,8 @@ rebuild and rerun the health and security checks.
 - [Trivy security scanning](docs/security-scanning.md)
 - [Troubleshooting scenarios](docs/troubleshooting.md)
 - [Automation scripts](docs/automation.md)
+- [Final verification checklist](docs/final-verification.md)
+- [Interview preparation and 25 Q&A](docs/interview-prep.md)
 - [Screenshot capture guide](screenshots/README.md)
 
 ## GitHub publishing (when ready)
