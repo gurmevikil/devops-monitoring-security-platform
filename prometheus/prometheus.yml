@@ -3,6 +3,9 @@ global:
   scrape_timeout: 10s
   evaluation_interval: 15s
 
+rule_files:
+  - /etc/prometheus/alert_rules.yml
+
 scrape_configs:
   # Prometheus also scrapes itself so its own health and workload are visible.
   - job_name: prometheus

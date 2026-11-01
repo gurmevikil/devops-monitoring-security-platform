@@ -1,0 +1,80 @@
+groups:
+  - name: application-alerts
+    interval: 15s
+    rules:
+      - alert: ApplicationDown
+        expr: up{job="flask-app"} == 0
+        for: 30s
+        labels:
+          severity: critical
+        annotations:
+          summary: Flask application scrape target is down
+          description: Prometheus cannot scrape the Flask application's /metrics endpoint.
+
+      - alert: HighHTTPErrorRate
+        expr: |
+          (
+            sum(rate(http_errors_total[5m]))
+            / clamp_min(sum(rate(http_requests_total[5m])), 0.001)
+          ) > 0.05
+          and sum(rate(http_requests_total[5m])) > 0
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: HTTP 5xx error rate is above 5%
+          description: More than 5% of HTTP requests returned a server error over the recent five-minute window.
+
+  - name: host-alerts
+    interval: 15s
+    rules:
+      - alert: HighCPUUsage
+        expr: 100 * (1 - avg by (instance) (rate(node_cpu_seconds_total{mode="idle"}[5m]))) > 90
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: Linux host CPU usage is above 90%
+          description: CPU usage has remained above 90% for five minutes on {{ $labels.instance }}.
+
+      - alert: HighMemoryUsage
+        expr: 100 * (1 - node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes) > 90
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: Linux host memory usage is above 90%
+          description: Memory usage has remained above 90% for five minutes on {{ $labels.instance }}.
+
+      - alert: HighDiskUsage
+        expr: |
+          100 * (
+            1 - node_filesystem_avail_bytes{
+              fstype!~"tmpfs|overlay|squashfs|fuse.*|9p|proc|sysfs",
+              mountpoint!~"/run.*|/var/lib/docker.*|/mnt/host.*|/usr/lib/wsl.*|/proc.*|/sys.*|/dev.*"
+            }
+            / node_filesystem_size_bytes{
+              fstype!~"tmpfs|overlay|squashfs|fuse.*|9p|proc|sysfs",
+              mountpoint!~"/run.*|/var/lib/docker.*|/mnt/host.*|/usr/lib/wsl.*|/proc.*|/sys.*|/dev.*"
+            }
+          ) > 90
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: Linux filesystem usage is above 90%
+          description: Filesystem {{ $labels.mountpoint }} on {{ $labels.instance }} is above 90% used.
+
+  - name: container-alerts
+    interval: 15s
+    rules:
+      - alert: ContainerDown
+        expr: |
+          absent(container_last_seen{image="docker.io/library/devops-monitoring-app:1.0.0"})
+          or time() - container_last_seen{image="docker.io/library/devops-monitoring-app:1.0.0"} > 60
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: The demo Flask container is not reporting cAdvisor metrics
+          description: cAdvisor has no fresh series for the expected Flask container. Check the Compose app container and cAdvisor target.

@@ -55,13 +55,13 @@ as unavailable memory.
 ```promql
 100 * (
   1 - node_filesystem_avail_bytes{
-    fstype!~"tmpfs|overlay|squashfs|proc|sysfs",
-    mountpoint!~"/proc(/.*)?|/sys(/.*)?|/dev(/.*)?|/run(/.*)?"
+    fstype!~"tmpfs|overlay|squashfs|fuse.*|9p|proc|sysfs",
+    mountpoint!~"/proc(/.*)?|/sys(/.*)?|/dev(/.*)?|/run(/.*)?|/mnt/host.*|/usr/lib/wsl.*|/var/lib/docker.*"
   }
   /
   node_filesystem_size_bytes{
-    fstype!~"tmpfs|overlay|squashfs|proc|sysfs",
-    mountpoint!~"/proc(/.*)?|/sys(/.*)?|/dev(/.*)?|/run(/.*)?"
+    fstype!~"tmpfs|overlay|squashfs|fuse.*|9p|proc|sysfs",
+    mountpoint!~"/proc(/.*)?|/sys(/.*)?|/dev(/.*)?|/run(/.*)?|/mnt/host.*|/usr/lib/wsl.*|/var/lib/docker.*"
   }
 )
 ```
