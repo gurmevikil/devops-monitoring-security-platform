@@ -72,12 +72,14 @@ When a scan completes, the script creates its JSON and table reports:
 
 - `reports/image-scan.json` and `reports/image-scan.txt`
 - `reports/dependency-scan.json` and `reports/dependency-scan.txt`
-- `reports/config-scan.json` and `reports/config-scan.txt`
+- `reports/config-scan.json`
 
 The `.json` files are complete machine-readable findings. The `.txt` files
-are filtered to HIGH and CRITICAL findings for quick review. An empty result
-or `PASS` means no HIGH/CRITICAL finding was reported by that completed scan;
-it does not prove the software has no vulnerabilities.
+for image and dependency scans are filtered to HIGH and CRITICAL findings for
+quick review. Dockerfile misconfiguration results are kept as JSON because
+Trivy's `convert --format table` does not render these configuration results.
+An empty result or `PASS` means no HIGH/CRITICAL finding was reported by that
+completed scan; it does not prove the software has no vulnerabilities.
 
 ## Understand a finding
 

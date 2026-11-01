@@ -107,7 +107,7 @@ if run_trivy config \
 else
   config_status=$?
 fi
-convert_report config-scan
+echo "Dockerfile configuration findings are available in reports/config-scan.json."
 
 echo "Reports saved under reports/ (ignored by Git)."
 if (( image_status != 0 || dependency_status != 0 || config_status != 0 )); then
