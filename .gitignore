@@ -1,0 +1,20 @@
+# Local secrets and environment overrides
+.env
+.env.*
+!.env.example
+
+# Python environments and generated files
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+
+# Local scan reports; keep report placeholders/documentation in Git
+reports/*
+!reports/.gitkeep
+
+# Editor and OS noise
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

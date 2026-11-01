@@ -1,0 +1,22 @@
+{
+  "annotations": {"list": []},
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "panels": [
+    {"datasource":{"type":"prometheus","uid":"prometheus"},"fieldConfig":{"defaults":{"unit":"cores","min":0},"overrides":[]},"gridPos":{"h":9,"w":12,"x":0,"y":0},"id":1,"options":{"legend":{"displayMode":"table","placement":"bottom"},"tooltip":{"mode":"multi"}},"targets":[{"expr":"sum by (image) (rate(container_cpu_usage_seconds_total{image=~\"$image\"}[5m]))","legendFormat":"{{image}}","refId":"A"}],"title":"Container CPU usage (cores)","type":"timeseries"},
+    {"datasource":{"type":"prometheus","uid":"prometheus"},"fieldConfig":{"defaults":{"unit":"bytes","min":0,"thresholds":{"mode":"absolute","steps":[{"color":"green","value":null},{"color":"orange","value":536870912},{"color":"red","value":1073741824}] }},"overrides":[]},"gridPos":{"h":9,"w":12,"x":12,"y":0},"id":2,"options":{"legend":{"displayMode":"table","placement":"bottom"},"tooltip":{"mode":"multi"}},"targets":[{"expr":"sum by (image) (container_memory_working_set_bytes{image=~\"$image\"})","legendFormat":"{{image}}","refId":"A"}],"title":"Container working-set memory","type":"timeseries"},
+    {"datasource":{"type":"prometheus","uid":"prometheus"},"fieldConfig":{"defaults":{"unit":"bytes","min":0},"overrides":[]},"gridPos":{"h":8,"w":24,"x":0,"y":9},"id":3,"options":{"showHeader":true,"sortBy":[{"desc":true,"displayName":"Value"}]},"targets":[{"expr":"topk(5, container_memory_working_set_bytes{image=~\"$image\"})","format":"table","instant":true,"refId":"A"}],"title":"Top containers by memory","type":"table"}
+  ],
+  "refresh": "15s",
+  "schemaVersion": 41,
+  "tags": ["devops", "docker", "cadvisor"],
+  "templating": {"list": [{"current":{"selected":true,"text":"All","value":".*"},"datasource":{"type":"prometheus","uid":"prometheus"},"definition":"label_values(container_memory_working_set_bytes{image!=\"\"}, image)","hide":0,"includeAll":true,"label":"Image","multi":true,"name":"image","options":[],"query":{"query":"label_values(container_memory_working_set_bytes{image!=\"\"}, image)","refId":"Prometheus-image-Variable-Query"},"refresh":1,"type":"query","allValue":".*"}]},
+  "time": {"from": "now-1h", "to": "now"},
+  "timezone": "browser",
+  "title": "Docker Container Monitoring",
+  "uid": "docker-container-monitoring",
+  "version": 1
+}
