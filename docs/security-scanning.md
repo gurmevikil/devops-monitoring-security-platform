@@ -37,7 +37,12 @@ The first vulnerability scan downloads Trivy's database; it needs access to a
 supported registry. The script defaults to Aqua's official Docker Hub database
 image because this workstation cannot reach Trivy's default Google mirror or
 public AWS ECR mirror. Set `TRIVY_DB_REPOSITORY` in Git Bash to use another
-supported Trivy DB mirror if needed. Later scans reuse `.trivy-cache/` in the
+supported Trivy DB mirror if needed. If your network requires an HTTP(S)
+proxy, configure Docker Desktop's container proxy for image pulls and export
+`HTTPS_PROXY` (and `HTTP_PROXY`/`NO_PROXY` if required) in Git Bash before the
+scan; the script passes configured proxy variables into the Trivy container.
+Use the proxy address supplied by your network administrator, and do not
+commit proxy credentials. Later scans reuse `.trivy-cache/` in the
 project folder. If the image scan cannot obtain the vulnerability database,
 the dependency scan is skipped (it needs the same database), while the
 Dockerfile configuration scan still runs with Trivy's embedded checks when

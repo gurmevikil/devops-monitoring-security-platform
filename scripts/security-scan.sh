@@ -30,8 +30,17 @@ fi
 mkdir -p "$ROOT_DIR/.trivy-cache" "$HOST_REPORT_DIR"
 
 run_trivy() {
+  local proxy_args=()
+  local variable
+  for variable in HTTP_PROXY HTTPS_PROXY NO_PROXY http_proxy https_proxy no_proxy; do
+    if [[ -n "${!variable:-}" ]]; then
+      proxy_args+=(--env "$variable")
+    fi
+  done
+
   MSYS_NO_PATHCONV=1 docker run --rm \
     --env "TRIVY_DB_REPOSITORY=${TRIVY_DB_REPOSITORY:-aquasec/trivy-db}" \
+    "${proxy_args[@]}" \
     --mount "type=bind,source=$HOST_ROOT,target=/workspace" \
     --mount "type=bind,source=$HOST_CACHE,target=/root/.cache" \
     --mount "type=bind,source=/var/run/docker.sock,target=/var/run/docker.sock" \
