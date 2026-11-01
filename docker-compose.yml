@@ -46,14 +46,16 @@ services:
     restart: unless-stopped
 
   cadvisor:
-    # Official releases before v0.53.0 are published on GCR; newer releases
-    # use GHCR, which may be blocked on networks without GHCR access.
+    # Docker Desktop uses containerd for image storage. Read container metadata
+    # from its containerd socket instead of Docker's legacy layerdb.
     image: gcr.io/cadvisor/cadvisor:v0.52.1
+    command:
+      - "--containerd=/run/containerd/containerd.sock"
+      - "--containerd-namespace=moby"
     volumes:
       - /:/rootfs:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /run/containerd/containerd.sock:/run/containerd/containerd.sock:ro
       - /sys:/sys:ro
-      - /var/lib/docker:/var/lib/docker:ro
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
     ports:
       - "8080:8080"
