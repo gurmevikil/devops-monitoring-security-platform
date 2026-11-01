@@ -1,0 +1,64 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: app/Dockerfile
+    image: devops-monitoring-app:1.0.0
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus:v3.15.1
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--storage.tsdb.retention.time=15d"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    ports:
+      - "9090:9090"
+    depends_on:
+      app:
+        condition: service_healthy
+      node-exporter:
+        condition: service_started
+      cadvisor:
+        condition: service_started
+    restart: unless-stopped
+
+  node-exporter:
+    image: quay.io/prometheus/node-exporter:v1.12.1
+    command:
+      - "--path.procfs=/host/proc"
+      - "--path.sysfs=/host/sys"
+      - "--path.rootfs=/rootfs"
+      - "--web.listen-address=:9100"
+    pid: host
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    ports:
+      - "9100:9100"
+    restart: unless-stopped
+
+  cadvisor:
+    image: ghcr.io/google/cadvisor:v0.60.6
+    privileged: true
+    devices:
+      - "/dev/kmsg:/dev/kmsg"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker:/var/lib/docker:ro
+      - /dev/disk:/dev/disk:ro
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+
+volumes:
+  prometheus-data:
