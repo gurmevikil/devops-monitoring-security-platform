@@ -61,7 +61,8 @@ The host port mappings make the web UIs and exporter endpoints available to
 Windows at `localhost`. The Compose default network is IPv6-only because this
 workstation's network has working outbound IPv6 but no outbound IPv4. The
 Trivy container joins this project network so it can use the reachable route
-to registries.
+to registries. Gunicorn binds to `[::]:5000` so the app is reachable from the
+IPv6-only Compose network; the container healthcheck also uses IPv6 loopback.
 
 ## Operational boundaries
 

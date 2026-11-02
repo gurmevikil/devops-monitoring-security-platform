@@ -33,9 +33,15 @@ guarantee that every metric is available on every Docker runtime.
 
 - [x] Trivy Dockerfile configuration check completed using embedded checks:
   20 checks passed, 0 high/critical failures.
-- [ ] Complete Trivy image vulnerability and Python dependency scans. The
-  configured database registries refused connections; treat those scans as
-  incomplete, not clean. See [security scanning](security-scanning.md).
+- [x] Trivy image, Python dependency, and Dockerfile scans completed against
+  the rebuilt image. The image report contains 45 HIGH package matches across
+  9 Debian CVEs and 0 CRITICAL matches; all 45 currently have no fixed version
+  in the Trivy report. The requirements scan has no HIGH/CRITICAL findings and
+  the Dockerfile scan has 20 passes and 0 failures.
+- [ ] Clear the image security gate. It correctly exits 1 while those OS
+  findings remain; rebuild and rescan after Debian publishes fixes. Do not
+  treat the image as cleared for deployment. See
+  [security scanning](security-scanning.md).
 - [x] `.env`, Trivy cache, and generated scan reports are ignored by Git;
   `.env.example` contains only a placeholder.
 - [x] Separate Git commits exist for the implementation phases, including

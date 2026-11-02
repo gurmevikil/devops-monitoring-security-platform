@@ -50,7 +50,7 @@ run_trivy() {
 
   MSYS_NO_PATHCONV=1 docker run --rm \
     --network "$TRIVY_NETWORK" \
-    --env "TRIVY_DB_REPOSITORY=${TRIVY_DB_REPOSITORY:-aquasec/trivy-db}" \
+    --env "TRIVY_DB_REPOSITORY=${TRIVY_DB_REPOSITORY:-mirror.gcr.io/aquasec/trivy-db}" \
     "${proxy_args[@]}" \
     --mount "type=bind,source=$HOST_ROOT,target=/workspace" \
     --mount "type=bind,source=$HOST_CACHE,target=/root/.cache" \
@@ -68,6 +68,13 @@ convert_report() {
   if [[ -f "$HOST_REPORT_DIR/$report_name.json" ]]; then
     run_trivy convert --format table --severity "$SEVERITY" \
       --output "$REPORT_DIR/$report_name.txt" "$REPORT_DIR/$report_name.json"
+    if [[ ! -s "$HOST_REPORT_DIR/$report_name.txt" ]]; then
+      if [[ "$report_name" == "dependency-scan" && "${dependency_status:-1}" -eq 0 ]]; then
+        printf 'No %s dependency vulnerabilities found. See the JSON report for the package inventory.\n' "$SEVERITY" > "$HOST_REPORT_DIR/$report_name.txt"
+      elif [[ "$report_name" == "image-scan" && "${image_status:-1}" -eq 0 ]]; then
+        printf 'No %s image vulnerabilities or secrets found. See the JSON report for the package inventory.\n' "$SEVERITY" > "$HOST_REPORT_DIR/$report_name.txt"
+      fi
+    fi
   else
     echo "WARN: $report_name.json was not produced because its scan could not complete." >&2
   fi

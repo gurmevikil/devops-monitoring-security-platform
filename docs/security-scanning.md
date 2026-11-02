@@ -34,10 +34,11 @@ docker image inspect devops-monitoring-app:1.0.0
 ```
 
 The first vulnerability scan downloads Trivy's database; it needs access to a
-supported registry. The script defaults to Aqua's official Docker Hub database
-image because this workstation cannot reach Trivy's default Google mirror or
-public AWS ECR mirror. Set `TRIVY_DB_REPOSITORY` in Git Bash to use another
-supported Trivy DB mirror if needed. If your network requires an HTTP(S)
+supported registry. This workstation cannot reach Trivy's default Google
+mirror or the Docker Hub registry reliably, so the script defaults to
+`mirror.gcr.io/aquasec/trivy-db`, which was reachable from the project network.
+Set `TRIVY_DB_REPOSITORY` in Git Bash to use another supported Trivy DB mirror
+if needed. If your network requires an HTTP(S)
 proxy, configure Docker Desktop's container proxy for image pulls and export
 `HTTPS_PROXY` (and `HTTP_PROXY`/`NO_PROXY` if required) in Git Bash before the
 scan; the script passes configured proxy variables into the Trivy container.
@@ -85,6 +86,28 @@ quick review. Dockerfile misconfiguration results are kept as JSON because
 Trivy's `convert --format table` does not render these configuration results.
 An empty result or `PASS` means no HIGH/CRITICAL finding was reported by that
 completed scan; it does not prove the software has no vulnerabilities.
+
+## Latest scan result
+
+On 2026-11-02, the complete scan succeeded technically after the Trivy database
+was reachable, but the security gate correctly returned exit code `1`: the
+image report contains 45 HIGH package matches across 9 unique Debian CVEs and
+no CRITICAL matches. Trivy listed no fixed package version for any of those
+45 matches. The Python requirements scan reported no HIGH/CRITICAL findings;
+the Dockerfile scan passed 20 checks with 0 failures. The package matches
+repeat a small set of CVEs across related Debian packages, so 45 is not 45
+distinct vulnerabilities.
+
+The build now uses the current pinned Python 3.12 Trixie image and upgrades
+Debian packages from the security repository. A rebuild installed the latest
+available packages, but Debian currently marks examples such as ncurses as
+`no DSA` and the listed util-linux and SQLite issues as vulnerable for Trixie.
+Those advisories have no available patched package in the configured
+repository at scan time. Keep the gate enabled and rerun after Debian publishes
+updates; do not hide these findings with a blanket ignore rule. See the
+[Debian ncurses tracker](https://security-tracker.debian.org/tracker/CVE-2025-69720),
+[Debian util-linux tracker](https://security-tracker.debian.org/tracker/source-package/util-linux),
+and [Debian SQLite tracker](https://security-tracker.debian.org/tracker/source-package/sqlite3).
 
 ## Understand a finding
 
