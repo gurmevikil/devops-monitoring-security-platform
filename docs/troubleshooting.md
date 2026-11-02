@@ -270,6 +270,16 @@ docker compose exec prometheus df -h /prometheus
 first response: it can remove images or caches needed for recovery. Do not
 fill the filesystem to test this alert.
 
+**Observed baseline (2026-11-02, Docker Desktop):** the alert expression
+returned 5.77% used for the `/mnt/docker-desktop-disk` filesystem and its
+reported aliases, and 59.89% for `/mnt` and its reported aliases. The
+`/parent-distro/init` root filesystem was 0.07%. These are Linux VM
+filesystems, not Windows C:. `docker system df` reported 3.54 GB of images,
+602.3 MB of local volumes, and 770.6 MB of build cache (286.3 MB reclaimable).
+The Prometheus data mount was 1% used (`df -h /prometheus`). Disk usage was
+below the 90% alert threshold, so no cleanup or alert-triggering test was
+performed.
+
 **Fix:** identify which mount is full, then remove only known disposable
 artifacts or old generated reports after confirming they are not needed.
 Review Prometheus retention and disk allocation before changing retention or
