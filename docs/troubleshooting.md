@@ -63,6 +63,16 @@ mapping appears in `docker compose port app 5000`.
 <http://localhost:9090/targets>; `ApplicationDown` returns to Inactive after
 Prometheus observes recovery.
 
+**Safe exercise and observed result (2026-11-02):** In PowerShell, run
+`docker compose stop app`, then `curl.exe -sS --max-time 3
+http://localhost:5000/health`. The request fails while the service is stopped.
+After one scrape, Prometheus reports `flask-app` DOWN. Keep it stopped longer
+than the rule's 30-second pending period and `ApplicationDown` fires. Restore
+it with `docker compose up -d app`; after the next successful scrape, the
+health check passes, `flask-app` returns UP, and the alert clears. The outage
+was intentionally induced by stopping the container, so the expected recovery
+was to start it again; no code or configuration change was needed.
+
 ## Scenario 2: Prometheus target is DOWN
 
 **Impact:** metrics and alerts for that scrape job become missing or stale.
