@@ -334,6 +334,16 @@ reports no unexcepted HIGH/CRITICAL findings, and the script exits `0`. A
 nonzero result caused by database/network failure is not a successful
 verification.
 
+**Observed exercise (2026-11-02):** the security gate completed against
+`devops-monitoring-app:1.0.0` (Alpine 3.24.3). Image, Python dependency, and
+Dockerfile configuration scans completed; no HIGH or CRITICAL findings were
+reported, and the Dockerfile configuration scan reported 20 successes and 0
+failures. No critical vulnerability was present to remediate, so this run
+verified the clean-image gate rather than a critical-CVE remediation. For a
+real finding, preserve the failing report, identify the affected package and
+fixed version, update the base image or dependency, rebuild, and rerun the
+gate before deployment.
+
 ## Practice safely
 
 The application exposes `/api/error` for the controlled HTTP error alert. The
