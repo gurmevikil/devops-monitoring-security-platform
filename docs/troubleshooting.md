@@ -157,6 +157,14 @@ means the Grafana container, not the Windows host or Prometheus container.
 **Verify recovery:** Grafana's datasource page reports a successful
 connection, and the Explore view returns samples for `up`.
 
+**Safe exercise and observed result (2026-11-02):** Before the outage,
+`docker compose exec -T grafana wget -qO- http://prometheus:9090/-/ready`
+returned `Prometheus Server is Ready.` Stopping Prometheus made the same
+request fail with a service-DNS error. After `docker compose up -d prometheus`,
+the readiness endpoint recovered and the full health check showed every
+configured Prometheus target UP. The provisioned datasource URL remained
+`http://prometheus:9090`; no Grafana configuration change was needed.
+
 ## Scenario 4: Docker container consumes excessive memory
 
 **Impact:** the container may become slow or be killed under memory pressure;
