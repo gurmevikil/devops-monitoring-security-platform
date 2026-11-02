@@ -243,6 +243,11 @@ five minutes, followed by the rule's 5-minute rate window.
 **Verify recovery:** CPU falls below the threshold in Prometheus and the
 `HighCPUUsage` alert clears after the expression and pending duration resolve.
 
+**Observed baseline (2026-11-02):** the Linux host CPU query returned about
+1.13% utilization. The 1-minute cAdvisor query showed the app at about 0.01
+CPU cores, with the other top containers also near 0.01 cores. This is a
+healthy baseline rather than a 90% CPU incident; the alert was not triggered.
+
 ## Scenario 6: Disk utilization reaches 90%
 
 **Impact:** writes, logs, or container operations can fail when a filesystem
