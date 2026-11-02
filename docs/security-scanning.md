@@ -48,16 +48,19 @@ the dependency scan is skipped (it needs the same database), while the
 Dockerfile configuration scan still runs with Trivy's embedded checks when
 the remote checks bundle is unreachable. Docker Desktop
 must expose its Linux engine socket at `/var/run/docker.sock` inside
-containers, as it does for the cAdvisor service in this project. Trivy's
-official database locations are listed in the
+containers, as it does for the cAdvisor service in this project. The Compose
+default network enables IPv6, and the scan container joins that network. Start
+the stack before scanning so the script can select the network. Override it
+with `TRIVY_NETWORK` only when using a different network. Trivy's official
+database locations are listed in the
 [Trivy database documentation](https://trivy.dev/docs/latest/guide/configuration/db/).
 
 ## Run scans
 
-From Git Bash at the repository root, build the app image and run:
+From Git Bash at the repository root, start the project network and run:
 
 ```bash
-docker compose build app
+docker compose up --build --detach
 bash scripts/security-scan.sh
 ```
 

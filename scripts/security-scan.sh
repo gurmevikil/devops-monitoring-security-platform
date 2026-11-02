@@ -22,6 +22,16 @@ if ! docker image inspect "$IMAGE" >/dev/null 2>&1; then
   exit 2
 fi
 
+TRIVY_NETWORK="${TRIVY_NETWORK:-}"
+if [[ -z "$TRIVY_NETWORK" ]]; then
+  APP_CONTAINER="$(docker compose ps -q app)"
+  if [[ -z "$APP_CONTAINER" ]]; then
+    echo "ERROR: Start the Compose stack first so Trivy can use its IPv6-enabled network: docker compose up -d" >&2
+    exit 2
+  fi
+  TRIVY_NETWORK="$(docker inspect --format '{{range $name, $network := .NetworkSettings.Networks}}{{$name}}{{end}}' "$APP_CONTAINER")"
+fi
+
 if ! docker image inspect "$TRIVY_IMAGE" >/dev/null 2>&1; then
   echo "Pulling pinned Trivy image $TRIVY_IMAGE"
   docker pull "$TRIVY_IMAGE"
@@ -39,6 +49,7 @@ run_trivy() {
   done
 
   MSYS_NO_PATHCONV=1 docker run --rm \
+    --network "$TRIVY_NETWORK" \
     --env "TRIVY_DB_REPOSITORY=${TRIVY_DB_REPOSITORY:-aquasec/trivy-db}" \
     "${proxy_args[@]}" \
     --mount "type=bind,source=$HOST_ROOT,target=/workspace" \

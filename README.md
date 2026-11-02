@@ -10,6 +10,8 @@ and data flow.
 
 - A Python Flask API with health, information, sample API, and Prometheus
   metrics endpoints.
+- A dual-stack Compose network with IPv6 enabled for registry access on
+  networks where outbound IPv4 is unavailable.
 - Docker Compose services for Flask, Prometheus, Node Exporter, cAdvisor, and
   Grafana.
 - Three provisioned Grafana dashboards for application, Linux VM, and
