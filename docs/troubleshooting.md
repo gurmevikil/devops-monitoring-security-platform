@@ -115,6 +115,14 @@ mount is present. For Node Exporter, check that it responds on port 9100.
 known metric such as `up{job="flask-app"}` returns `1` in the Prometheus
 query page.
 
+**Safe exercise and observed result (2026-11-02):** `docker compose stop
+node-exporter` removed the service from Compose DNS, and Prometheus reported the
+`node-exporter` target DOWN with a DNS lookup error. Starting it again with
+`docker compose up -d node-exporter` restored the target to UP after a scrape.
+The full health check then passed. This project has no dedicated alert for a
+Node Exporter target outage, so the target page and monitoring dashboards are
+the detection points for this exercise.
+
 ## Scenario 3: Grafana cannot connect to Prometheus
 
 **Impact:** dashboards show datasource errors or No data even while Prometheus
