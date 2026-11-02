@@ -1,6 +1,6 @@
-# Pin a supported Python patch release and Debian release. Refresh installed
-# Debian packages at build time so the image includes available security fixes.
-FROM python:3.12.16-slim-trixie
+# Use the official Python image on Alpine, which avoids the unresolved Debian
+# OS advisories found in the previous base image. Refresh Alpine packages too.
+FROM python:3.12.16-alpine3.24
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
@@ -8,12 +8,10 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
-RUN apt-get update \
-    && apt-get upgrade --yes --no-install-recommends \
-    && rm -rf /var/lib/apt/lists/*
+RUN apk upgrade --no-cache
 
 # Run the service without root privileges inside the container.
-RUN groupadd --system app && useradd --system --gid app --create-home app
+RUN addgroup -S app && adduser -S -G app app
 
 # Copy dependencies first so Docker can reuse this layer when application code changes.
 COPY app/requirements.txt ./requirements.txt

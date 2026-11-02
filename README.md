@@ -150,15 +150,15 @@ docker-compose.yml   Local multi-container stack
 ## Pinned components
 
 The project pins the versions used in this implementation: Python
-`3.12.16-slim-trixie`, Prometheus `3.15.1`,
+`3.12.16-alpine3.24`, Prometheus `3.15.1`,
 Node Exporter `1.12.1`, cAdvisor `0.52.1`, Grafana `13.3.0`, and Trivy `0.76.1`.
 Flask and its Prometheus client are pinned in
 [`app/requirements.txt`](app/requirements.txt). cAdvisor uses the official
 `gcr.io/cadvisor/cadvisor` registry because the GHCR image host was unreachable
-from the original workstation. The app image applies available Debian security
-repository upgrades during each build, so rebuilding can pick up OS fixes
-without changing the Python patch tag. Review and update pins deliberately,
-then rerun the health and security checks.
+from the original workstation. The app image applies available Alpine package
+upgrades during each build. Its Python dependencies and health endpoints were
+verified on Alpine; review and update pins deliberately, then rerun the health
+and security checks.
 
 ## Documentation
 

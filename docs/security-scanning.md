@@ -89,25 +89,20 @@ completed scan; it does not prove the software has no vulnerabilities.
 
 ## Latest scan result
 
-On 2026-11-02, the complete scan succeeded technically after the Trivy database
-was reachable, but the security gate correctly returned exit code `1`: the
-image report contains 45 HIGH package matches across 9 unique Debian CVEs and
-no CRITICAL matches. Trivy listed no fixed package version for any of those
-45 matches. The Python requirements scan reported no HIGH/CRITICAL findings;
-the Dockerfile scan passed 20 checks with 0 failures. The package matches
-repeat a small set of CVEs across related Debian packages, so 45 is not 45
-distinct vulnerabilities.
+On 2026-11-02, the complete scan succeeded and the security gate returned exit
+code `0`. The image report has no HIGH/CRITICAL vulnerabilities or embedded
+secrets, the Python requirements scan has no HIGH/CRITICAL findings, and the
+Dockerfile scan passed 20 checks with 0 failures.
 
-The build now uses the current pinned Python 3.12 Trixie image and upgrades
-Debian packages from the security repository. A rebuild installed the latest
-available packages, but Debian currently marks examples such as ncurses as
-`no DSA` and the listed util-linux and SQLite issues as vulnerable for Trixie.
-Those advisories have no available patched package in the configured
-repository at scan time. Keep the gate enabled and rerun after Debian publishes
-updates; do not hide these findings with a blanket ignore rule. See the
-[Debian ncurses tracker](https://security-tracker.debian.org/tracker/CVE-2025-69720),
-[Debian util-linux tracker](https://security-tracker.debian.org/tracker/source-package/util-linux),
-and [Debian SQLite tracker](https://security-tracker.debian.org/tracker/source-package/sqlite3).
+The previous Debian Trixie image reported 45 HIGH package matches across 9
+unique CVEs, with no fixed package versions available in the configured
+repository. To reduce the image's operating-system attack surface, the app now
+uses the official Python `3.12.16-alpine3.24` image and applies available
+Alpine package upgrades at build time. The Flask requirements built from
+musllinux-compatible wheels, and the app, host health endpoint, Prometheus
+scrape, and all other monitoring checks passed on this image. The CI gate
+remains configured for HIGH/CRITICAL findings; no vulnerability ignore rules
+were added. See the [official Python image tags](https://hub.docker.com/_/python/tags?name=3.12-alpine3.24).
 
 ## Understand a finding
 
