@@ -203,6 +203,12 @@ remove the underlying cause.
 stable memory over several minutes, the container remains running, and its
 logs show no OOM termination.
 
+**Observed baseline (2026-11-02):** `docker stats --no-stream` showed the app
+at about 35 MiB of 7.6 GiB available to the Docker VM. `docker inspect` showed
+`OOMKilled=false` and exit code `0`. This is a healthy baseline, not a simulated
+memory incident; compare future readings over time before treating a single
+sample as a leak.
+
 ## Scenario 5: CPU utilization reaches 90%
 
 **Impact:** requests may slow down, time out, or queue while the Linux VM has
