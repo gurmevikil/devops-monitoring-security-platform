@@ -1,7 +1,8 @@
 # Project screenshots
 
-Capture genuine screenshots from the running local project before publishing
-the repository. Do not add example/fabricated dashboard images.
+Capture genuine screenshots from the running local project before sharing the
+project as a portfolio example. The repository is published, but screenshots
+have not yet been added. Do not add example/fabricated dashboard images.
 
 Suggested captures:
 

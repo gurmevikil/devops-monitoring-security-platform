@@ -40,12 +40,11 @@ guarantee that every metric is available on every Docker runtime.
   [security scanning](security-scanning.md).
 - [x] `.env`, Trivy cache, and generated scan reports are ignored by Git;
   `.env.example` contains only a placeholder.
-- [x] Separate Git commits exist for the implementation phases, including
-  automation and GitHub preparation. The latest local commit includes this
-  documentation update once committed.
+- [x] Separate Git commits exist for implementation and troubleshooting
+  exercises. The repository is published on GitHub at
+  <https://github.com/gurmevikil/devops-monitoring-security-platform>, branch
+  `main`.
 - [ ] Capture genuine Grafana and Prometheus screenshots in `screenshots/`.
-- [ ] Publish to GitHub when ready. Publishing was deferred; see the commands
-  in the [README](../README.md#github-publishing-when-ready).
 - [ ] AWS deployment is an optional future extension and has not been done.
 
 ## Useful final commands

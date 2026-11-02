@@ -10,9 +10,10 @@ Linux VM, and container dashboards. I added Trivy scanning with a
 HIGH/CRITICAL gate, operational scripts, and troubleshooting scenarios. I
 validated target health and deliberately triggered application and HTTP error
 alerts. On Docker Desktop, Node Exporter monitors the Linux VM, and I documented
-the cAdvisor network metric limitation. The Trivy Dockerfile check passed, but
-the vulnerability database registries were unreachable, so I have not claimed
-the image and dependency scans passed.”
+the cAdvisor network metric limitation. Trivy completed image, Python
+dependency, and Dockerfile scans with no HIGH or CRITICAL findings. I pushed
+the project to GitHub with separate commits. It has no external alert
+notification receiver, and AWS deployment remains an optional extension.”
 
 ## Architecture explanation
 

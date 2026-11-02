@@ -174,23 +174,20 @@ and security checks.
 - [Interview preparation and 25 Q&A](docs/interview-prep.md)
 - [Screenshot capture guide](screenshots/README.md)
 
-## GitHub publishing (when ready)
+## GitHub repository
 
-The local project already has a Git history with separate feature/documentation
-commits. When you are ready, create an **empty** GitHub repository named
-`devops-monitoring-security` (do not initialize it with a README, license, or
-`.gitignore`). Then run these commands in **PowerShell** from the project
-folder, replacing `YOUR_GITHUB_USERNAME`:
+The project is published at
+<https://github.com/gurmevikil/devops-monitoring-security-platform> on the
+`main` branch. Clone it with Git:
 
 ```powershell
-git remote add origin https://github.com/YOUR_GITHUB_USERNAME/devops-monitoring-security.git
-git push -u origin master
+git clone https://github.com/gurmevikil/devops-monitoring-security-platform.git
+cd devops-monitoring-security-platform
 ```
 
-If `origin` was already configured, inspect it with `git remote -v` and use
-`git remote set-url origin https://github.com/YOUR_GITHUB_USERNAME/devops-monitoring-security.git`
-instead of adding a second origin. Review `git status` and `git diff` before
-publishing. Never stage `.env`, credentials, or local reports.
+The local Git history contains separate implementation and runbook commits.
+Never commit `.env`, credentials, the Trivy cache, or generated local scan
+reports.
 
 ## Optional AWS extension
 
