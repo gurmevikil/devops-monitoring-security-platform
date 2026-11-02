@@ -49,9 +49,11 @@ Dockerfile configuration scan still runs with Trivy's embedded checks when
 the remote checks bundle is unreachable. Docker Desktop
 must expose its Linux engine socket at `/var/run/docker.sock` inside
 containers, as it does for the cAdvisor service in this project. The Compose
-default network enables IPv6, and the scan container joins that network. Start
-the stack before scanning so the script can select the network. Override it
-with `TRIVY_NETWORK` only when using a different network. Trivy's official
+default network is IPv6-only on this workstation, and the scan container joins
+that network. Start the stack before scanning so the script can select the
+network. Override it with `TRIVY_NETWORK` only when using a different network.
+The script allows a 30-minute scan timeout for the slow registry connection;
+override it with `TRIVY_TIMEOUT` in Git Bash if needed. Trivy's official
 database locations are listed in the
 [Trivy database documentation](https://trivy.dev/docs/latest/guide/configuration/db/).
 

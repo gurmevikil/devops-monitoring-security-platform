@@ -58,11 +58,10 @@ Containers address one another by Compose service name. For example, Grafana
 uses `prometheus:9090`, and Prometheus scrapes `app:5000` and the exporter
 service names. `localhost` inside a container refers to that same container.
 The host port mappings make the web UIs and exporter endpoints available to
-Windows at `localhost`. The Compose default network enables IPv6 as well as
-IPv4 so containers can reach registries on networks where outbound IPv4 is
-unavailable. The Trivy container joins this same project network; it cannot
-use the Docker host's successful registry route if placed on an IPv4-only
-network.
+Windows at `localhost`. The Compose default network is IPv6-only because this
+workstation's network has working outbound IPv6 but no outbound IPv4. The
+Trivy container joins this project network so it can use the reachable route
+to registries.
 
 ## Operational boundaries
 

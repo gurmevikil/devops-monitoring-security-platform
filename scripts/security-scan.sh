@@ -56,7 +56,7 @@ run_trivy() {
     --mount "type=bind,source=$HOST_CACHE,target=/root/.cache" \
     --mount "type=bind,source=/var/run/docker.sock,target=/var/run/docker.sock" \
     --workdir /workspace \
-    "$TRIVY_IMAGE" "$@"
+    "$TRIVY_IMAGE" --timeout "${TRIVY_TIMEOUT:-30m}" "$@"
 }
 
 image_status=0
