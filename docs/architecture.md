@@ -67,8 +67,10 @@ IPv6-only Compose network; the container healthcheck also uses IPv6 loopback.
 ## Operational boundaries
 
 - Local development uses unauthenticated Prometheus/exporter endpoints on
-  published local ports. Do not expose this configuration to a public network.
-- Grafana credentials come from local `.env`, which is ignored by Git.
+  published ports. Grafana allows anonymous Viewer access and its web port is
+  bound to `127.0.0.1`; do not expose this configuration to a public network.
+- Grafana administrator credentials come from local `.env`, which is ignored
+  by Git.
 - Named Prometheus and Grafana volumes persist across `docker compose down`.
 - This stack is a learning project; production use requires an authenticated,
   secured, durable, and monitored deployment, plus alert delivery and tested

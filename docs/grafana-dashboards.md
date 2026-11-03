@@ -12,7 +12,16 @@ The stack pins Grafana OSS `13.3.0`, a stable release published October 27,
 2026. The project pins a specific tag so dashboard behavior does not silently
 change when the stack is recreated. See the [official Grafana download page](https://grafana.com/grafana/download?pl=null&platform=docker).
 
-## Set the local login password
+## Open the dashboards without signing in
+
+This learning stack enables Grafana anonymous access with the **Viewer** role
+and binds the web port to `127.0.0.1`, so it is reachable from this Windows
+machine only. Open <http://localhost:3000>; the provisioned dashboards should
+be available without a login. Anonymous viewers can query the configured
+Prometheus data source, so do not put private or sensitive data in this local
+stack. Do not expose this Grafana instance to a network or the internet.
+
+## Local administrator credentials
 
 The repository contains `.env.example` with a placeholder. Copy it to `.env`,
 replace the placeholder with a unique local password, then start the stack:
@@ -24,13 +33,15 @@ docker compose up --detach
 ```
 
 The actual `.env` file is ignored by Git. Keep its password private. The
-Grafana username defaults to `admin` and can be changed with
-`GRAFANA_ADMIN_USER` in `.env`.
+administrator username defaults to `admin` and can be changed with
+`GRAFANA_ADMIN_USER` in `.env`. Anonymous Viewer access is intended for
+convenient local dashboard viewing; use the administrator credentials if you
+need to change Grafana settings.
 
 ## Open the dashboards
 
-Browse to <http://localhost:3000>, sign in with the username and password in
-`.env`, then open **Dashboards → DevOps Monitoring**. The folder contains:
+Browse to <http://localhost:3000> without signing in, then open
+**Dashboards → DevOps Monitoring**. The folder contains:
 
 - **Application Monitoring:** request rate by status, p95 request latency,
   server-error percentage, application availability, and requests by endpoint.

@@ -15,7 +15,7 @@ and data flow.
 - Docker Compose services for Flask, Prometheus, Node Exporter, cAdvisor, and
   Grafana.
 - Three provisioned Grafana dashboards for application, Linux VM, and
-  container metrics.
+  container metrics, available to anonymous viewers on localhost.
 - Prometheus rules for app availability, HTTP 5xx rate, host CPU/memory/disk,
   and container availability.
 - A pinned Trivy scanner script with a HIGH/CRITICAL gate and JSON/table
@@ -95,8 +95,10 @@ registry access. Open these local services:
 - Node Exporter: <http://localhost:9100/metrics>
 - cAdvisor: <http://localhost:8080/metrics>
 
-Use the username and password configured in `.env` to sign in to Grafana. Do
-not put production credentials in this learning stack.
+Open Grafana at <http://localhost:3000> without signing in. The web port is
+bound to localhost and anonymous users have Viewer access. Keep the admin
+password in `.env` private; do not put production credentials or sensitive
+data in this learning stack.
 
 ## Verify and operate
 

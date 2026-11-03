@@ -18,6 +18,9 @@ guarantee that every metric is available on every Docker runtime.
   network counters were not available on this Docker Desktop/containerd
   configuration; `docker stats` is the local alternative.
 - [x] Grafana health and Prometheus datasource connectivity were verified.
+- [x] Anonymous Grafana Viewer access was verified without credentials: the
+  application, Linux system, and Docker container dashboard routes returned
+  HTTP 200. The Grafana host port is bound to `127.0.0.1`.
 - [x] Application, Linux system, and container dashboard provisioning was
   verified in Grafana.
 - [x] Prometheus rule configuration validated; application-down,
