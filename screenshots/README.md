@@ -1,18 +1,13 @@
 # Project screenshots
 
-Capture genuine screenshots from the running local project before sharing the
-project as a portfolio example. The repository is published, but screenshots
-have not yet been added. Do not add example/fabricated dashboard images.
+These genuine screenshots were captured from the local Docker Desktop stack
+on 2026-11-03. Grafana screenshots use anonymous Viewer access. The Prometheus
+Targets screenshot shows all four scrape jobs UP; the Alerts screenshot shows
+the configured rules inactive at capture time. Metrics and alert state change
+as the stack runs, so treat these as point-in-time examples.
 
-Suggested captures:
-
-1. Grafana Application Monitoring dashboard with request rate and error panels.
-2. Grafana Linux System Monitoring dashboard with CPU, memory, and filesystem.
-3. Grafana Docker Container Monitoring dashboard with CPU and memory panels.
-4. Prometheus **Status → Targets** showing the scrape jobs UP.
-5. Prometheus **Alerts** showing the rules loaded (and optionally a controlled
-   demo alert firing).
-
-Save PNG files in this directory with descriptive names such as
-`application-dashboard.png` and `prometheus-targets.png`. Crop out browser
-profiles, credentials, personal paths, and unrelated private information.
+- `application-dashboard.png` — request rate, latency, errors, availability.
+- `linux-system-dashboard.png` — CPU, memory, filesystem, network.
+- `docker-container-dashboard.png` — container CPU and memory.
+- `prometheus-targets.png` — scrape target health.
+- `prometheus-alerts.png` — configured Prometheus alert rules.
